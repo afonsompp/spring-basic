@@ -3,6 +3,7 @@ package br.com.alura.forum.controller;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -37,6 +38,7 @@ public class TopicoController {
     }
 
     @GetMapping
+    @Cacheable(value = "topicos")
     public Page<TopicoDto> topicos(@PageableDefault(sort = "id") Pageable pageable) {
         return TopicoDto.toTopicoDto(topicoRepository.findAll(pageable));
     }
