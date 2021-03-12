@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 
 import br.com.alura.forum.model.Usuario;
 import springfox.documentation.builders.ParameterBuilder;
@@ -14,6 +15,7 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 
 @Configuration
+@Profile("dev")
 public class SwaggerConfig {
     @Configuration
 public class SwaggerConfigurations {

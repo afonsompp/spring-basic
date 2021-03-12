@@ -2,6 +2,7 @@ package br.com.alura.forum.controller;
 
 import javax.validation.Valid;
 
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -18,6 +19,7 @@ import br.com.alura.forum.controller.dto.TokenDto;
 
 @RestController
 @RequestMapping("/login")
+@Profile("prod")
 public class AutenticacaoController {
 
     private final AuthenticationManager authManager;
