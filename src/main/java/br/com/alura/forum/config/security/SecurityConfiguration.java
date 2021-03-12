@@ -17,9 +17,10 @@ import br.com.alura.forum.repository.UsuarioRepository;
 
 @EnableWebSecurity
 @Configuration
-public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
+public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private final UsuarioRepository repository;
     private final TokenService tokenService;
+
     public SecurityConfiguration(UsuarioRepository repository, TokenService tokenService) {
         this.repository = repository;
         this.tokenService = tokenService;
@@ -35,20 +36,17 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         AutenticacaoService autenticacaoService = new AutenticacaoService(repository);
-        auth.userDetailsService(autenticacaoService).passwordEncoder(new BCryptPasswordEncoder());    
+        auth.userDetailsService(autenticacaoService).passwordEncoder(new BCryptPasswordEncoder());
     }
+
     // configuração de autorização de acesso as rotas
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-                .antMatchers(HttpMethod.GET, "/topico").permitAll()
-                .antMatchers(HttpMethod.GET, "/topico/*").permitAll()
-                .antMatchers(HttpMethod.POST, "/login").permitAll()
-                .antMatchers(HttpMethod.GET, "/actuator/**").permitAll()
-                .anyRequest().authenticated()
-                .and().csrf().disable()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and().addFilterBefore(new AutenticacaoFilter(tokenService, repository), 
+        http.authorizeRequests().antMatchers(HttpMethod.GET, "/topico").permitAll()
+                .antMatchers(HttpMethod.GET, "/topico/*").permitAll().antMatchers(HttpMethod.POST, "/login").permitAll()
+                .antMatchers(HttpMethod.GET, "/actuator/**").permitAll().anyRequest().authenticated().and().csrf()
+                .disable().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+                .addFilterBefore(new AutenticacaoFilter(tokenService, repository),
                         UsernamePasswordAuthenticationFilter.class);
 
     }
@@ -56,6 +54,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
     // configuração de utilização de recursos estáticos(html, css, js, imagens)
     @Override
     public void configure(WebSecurity web) throws Exception {
-        super.configure(web);
+        web.ignoring().antMatchers("/**.html", "/v2/api-docs", "/webjars/**", "/configuration/**",
+                "/swagger-resources/**");
     }
 }
