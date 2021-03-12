@@ -1,7 +1,25 @@
 INSERT INTO
     USUARIO(nome, email, senha)
 VALUES
-    ('Aluno', 'aluno@email.com', '$2a$10$s5qx1aF1VcXOtLIvbo1AWOjYe2DYzmwJbsPMisBqm4KE3Ne.xlj0W');
+    (
+        'Aluno',
+        'aluno@email.com',
+        '$2a$10$Y4zBdtG2y5qj77UHuFM78e95dPH7ToTR8Xk/VVzOz7aavfGRzGf4q'
+    ),
+    (
+        'Moderador',
+        'moderador@email.com',
+        '$2a$10$Y4zBdtG2y5qj77UHuFM78e95dPH7ToTR8Xk/VVzOz7aavfGRzGf4q'
+    );
+
+INSERT INTO PERFIS VALUES (null, 'ROLE_ALUNO');
+INSERT INTO PERFIS VALUES (null, 'ROLE_MODERADOR');
+
+INSERT INTO
+    USUARIO_PERFIS
+VALUES
+    (1, 1),
+    (2, 2);
 
 INSERT INTO
     CURSO(nome, categoria)

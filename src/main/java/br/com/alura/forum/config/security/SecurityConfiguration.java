@@ -43,10 +43,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/topico").permitAll()
-                .antMatchers(HttpMethod.GET, "/topico/*").permitAll().antMatchers(HttpMethod.POST, "/login").permitAll()
-                .antMatchers(HttpMethod.GET, "/actuator/**").permitAll().anyRequest().authenticated().and().csrf()
-                .disable().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                .addFilterBefore(new AutenticacaoFilter(tokenService, repository),
+                .antMatchers(HttpMethod.GET, "/topico/*")
+                .permitAll().antMatchers(HttpMethod.POST, "/login").permitAll()
+                .antMatchers(HttpMethod.GET, "/actuator/**")
+                .permitAll().antMatchers(HttpMethod.DELETE, "/topico/*").hasRole("MODERADOR")
+                .anyRequest().authenticated()
+                .and().csrf().disable()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and().addFilterBefore(new AutenticacaoFilter(tokenService, repository), 
                         UsernamePasswordAuthenticationFilter.class);
 
     }
@@ -55,6 +59,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring().antMatchers("/**.html", "/v2/api-docs", "/webjars/**", "/configuration/**",
-                "/swagger-resources/**");
+                "/swagger-resources/**", "/h2-console/**", "/favicon.ico/**");
+    }
+
+    public static void main(String[] args) {
+        System.out.println(new BCryptPasswordEncoder().encode("123456"));
     }
 }
